@@ -1,4 +1,4 @@
-import { registerService } from "../services/authService.js";
+import { loginService, registerService } from "../services/authService.js";
 
 export const register = async (req, res) => {
     const { username, email, password } = req.body;
@@ -44,7 +44,56 @@ export const register = async (req, res) => {
 
         res.status(500).json({
             success: false,
-            error: err.message,
+            error: "Internal Server Error",
+        });
+    }
+};
+
+export const login = async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email) {
+        return res.status(400).json({
+            success: false,
+            error: "Email is required",
+        });
+    }
+
+    if (!password) {
+        return res.status(400).json({
+            success: false,
+            error: "Password is required",
+        });
+    }
+
+    try {
+        const token = await loginService(email, password);
+
+        res.json({
+            success: true,
+            message: "User logged in successfully",
+            data: {
+                token,
+            },
+        });
+    } catch (err) {
+        if (err.message === "user_not_found") {
+            return res.status(404).json({
+                success: false,
+                error: "User not found",
+            });
+        }
+
+        if (err.message === "invalid_password") {
+            return res.status(401).json({
+                success: false,
+                error: "Invalid password",
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            error: "Internal Server Error",
         });
     }
 };
