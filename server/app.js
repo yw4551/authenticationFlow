@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 import connectDb from "./config/db.js";
 import cors from "cors";
+import authRouter from "./routes/authRoutes.js";
 
 const app = express();
 
@@ -18,6 +19,8 @@ app.get("/health", (req, res) => {
         message: "Server is healthy",
     });
 });
+
+app.use("/auth", authRouter);
 
 const startServer = async () => {
     try {
