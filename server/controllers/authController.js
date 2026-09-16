@@ -1,4 +1,3 @@
-import User from "../models/userModels.js";
 import {
     getAllUsersService,
     loginService,

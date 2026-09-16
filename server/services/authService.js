@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const registerService = async (username, email, password) => {
+    const validatedUser = username.trim();
     const validatedEmail = email.toLowerCase().trim();
 
     const existingUser = await User.findOne({ email: validatedEmail });
@@ -14,7 +15,7 @@ export const registerService = async (username, email, password) => {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = await User.create({
-        username,
+        username: validatedUser,
         email: validatedEmail,
         password: hashedPassword,
     });
