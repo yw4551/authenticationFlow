@@ -52,3 +52,7 @@ export const loginService = async (email, password) => {
 
     return token;
 };
+
+export const getAllUsersService = async () => {
+    return User.find().select("-password");
+};

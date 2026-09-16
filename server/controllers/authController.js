@@ -1,4 +1,9 @@
-import { loginService, registerService } from "../services/authService.js";
+import User from "../models/userModels.js";
+import {
+    getAllUsersService,
+    loginService,
+    registerService,
+} from "../services/authService.js";
 
 export const register = async (req, res) => {
     const { username, email, password } = req.body;
@@ -44,7 +49,7 @@ export const register = async (req, res) => {
 
         res.status(500).json({
             success: false,
-            error: "Internal Server Error",
+            error: "Internal Server",
         });
     }
 };
@@ -94,6 +99,25 @@ export const login = async (req, res) => {
         res.status(500).json({
             success: false,
             error: "Internal Server Error",
+        });
+    }
+};
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await getAllUsersService();
+
+        res.json({
+            success: true,
+            message: "All users list",
+            data: {
+                users,
+            },
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: "Internal server error",
         });
     }
 };
